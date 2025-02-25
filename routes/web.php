@@ -13,7 +13,13 @@ Route::get('/', function (Request $request){
             ->orWhere('email', 'like', '%' . $request->search . '%'); 
         })->paginate(5)->withQueryString(),
 
-        'searchTerm' => $request->search
+        'searchTerm' => $request->search,
+
+        'can' => [
+            'delete_user' => 
+                Auth::user() ? 
+                    Auth::user()->can('delete', User::class) : null
+        ]
     ]);
 })->name('home');
 
